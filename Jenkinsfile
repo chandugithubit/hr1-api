@@ -1,10 +1,15 @@
 pipeline {
     agent any
-
+ 
     stages {
         stage('git checkout') {
-            steps {
-                echo "${params.branchname}
+                when{
+            expression{
+                params.branchname == ""develop"
+            }
+                }
+                            steps {
+
                 git branch: 'main', credentialsId: 'github-tokens', url: 'https://github.com/chandugithubit/hr1-api'
             }
         }
