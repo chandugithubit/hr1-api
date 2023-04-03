@@ -1,37 +1,35 @@
 pipeline {
     agent any
- 
-    stages {
-        stage('git checkout') {
-                when{
-            expression{
-                params.branchname == ""develop"
-            }
-                }
-                            steps {
 
-                git branch: 'main', credentialsId: 'github-tokens', url: 'https://github.com/chandugithubit/hr1-api'
+    stages {
+      
+        stage('Git Checkout') {
+             when{
+                expression{
+                    params.branchName == "develop"
+                }
+            }
+            steps {
+                git branch: "${params.branchName}", credentialsId: 'github-tokens', url: 'https://github.com/javahometech/hr-api'
             }
         }
         stage('Maven Build') {
+             when{
+                expression{
+                    params.branchName == "develop"
+                }
+            }
             steps {
                 sh 'mvn clean package'
             }
         }
-        stage('Tomcat Deploy - Dev') {
-            steps {
-                sshagent(['tomcat-dev']) {
-                    sh "scp -o StrictHostKeyChecking=no target/hr1-api.war ec2-user@172.31.5.228:/opt/tomcat9/webapps/"
-                    sh "ssh ec2-user@172.31.5.228 /opt/tomcat9/bin/shutdown.sh"
-                    sh "ssh ec2-user@172.31.5.228 /opt/tomcat9/bin/startup.sh"
-                }
-            }
-        }
-            }
+     
+    }
     post {
-  always {
-    cleanWs()
-  }
+      always {
+        cleanWs()
+      }
+    }
 }
 
-    }
+
