@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage('git checkout') {
             steps {
+                echo "${params}
                 git branch: 'main', credentialsId: 'github-tokens', url: 'https://github.com/chandugithubit/hr1-api'
             }
         }
