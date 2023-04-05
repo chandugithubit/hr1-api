@@ -1,3 +1,4 @@
+@library('jhc') _
 pipeline {
     agent any
 
